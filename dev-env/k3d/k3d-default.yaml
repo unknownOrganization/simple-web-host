@@ -1,0 +1,21 @@
+---
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: k3s-default-mycluster
+servers: 1
+agents: 2
+image: docker.io/rancher/k3s:v1.27.4-k3s1
+ports:
+  - port: 80:80 # same as `--port '80:80@loadbalancer'`
+    nodeFilters:
+      - loadbalancer
+  - port: 443:443 # same as `--port '443:443@loadbalancer'`
+    nodeFilters:
+      - loadbalancer
+options:
+  k3s:
+    nodeLabels:
+      - label: purpose=worker # same as `--k3s-node-label 'purpose=worker@agent:*'` -> this results in a Kubernetes node label
+        nodeFilters:
+          - agent:*
